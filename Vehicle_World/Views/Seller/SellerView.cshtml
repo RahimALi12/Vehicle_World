@@ -1,0 +1,230 @@
+﻿@model IEnumerable<Vehicle_World.Models.CarDetail>
+
+@{
+    ViewData["Title"] = "My Cars";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa; /* Light grey background for the whole page */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        flex: 1;
+    }
+
+    .card {
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+        height: 200px; /* Fixed height for images */
+        object-fit: cover; /* Ensure the image covers the area without distortion */
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        display: inline-block;
+        margin: 0 2px; /* Reduce margin between icons */
+        font-size: 0.9rem;
+    }
+
+    .icons {
+        justify-content: center;
+    }
+
+    .no-items {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: calc(100vh - 70px); /* Adjust height based on your navbar height */
+        text-align: center;
+        margin-top: 50px;
+    }
+
+        .no-items h2 {
+            font-size: 1.5rem;
+            color: #6c757d;
+        }
+
+        .no-items p {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+    .add-car-icon {
+        font-size: 3rem;
+margin-top: -19px;
+        color: black;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container mt-5">
+
+    @if (Model == null || !Model.Any())
+    {
+
+        <div class="no-items">
+            <h2>No Items</h2>
+                        @if (User.IsInRole("Seller"))
+                        {
+            <p>You haven't uploaded any cars yet.</p>
+            <a asp-action="AddCar" asp-controller="Seller" asp-route-role="Seller" class="add-car-icon">
+                <i class="fa fa-plus-square text-dark"></i>
+            </a>
+}
+else if (User.IsInRole("Admin"))
+
+                        {
+
+    <p>This Seller haven't uploaded any cars yet.</p>
+
+}
+
+        </div>
+    }
+else if (User.IsInRole("Admin")){
+<h1 class="text-center" style="margin-top: 100px;">Seller Cars</h1>
+}
+    else
+    {
+        <h1 class="text-center" style="margin-top: 100px;">My Cars</h1>
+        <a asp-action="AddCar" asp-controller="Seller" class="add-car-icon">
+            <i class="fa fa-plus-square text-dark ms-auto"></i>
+        </a>
+        <div class="row mt-5">
+            @foreach (var car in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img src="~/web/assets/img/@car.Image" asp-append-version="true" class="card-img-top img-fluid" alt="image" />
+                        <div class="card-body">
+                            <h5 class="card-title">@(car.MakeType != null ? car.MakeType.Name : "N/A") @(car.ModelType != null ? car.ModelType.Name : "N/A") (@car.Year)</h5>
+                            <p class="card-text">
+                                <strong>Body Type:</strong> @car.BodyType.Name<br>
+                                <strong>Engine Type:</strong> @car.EngineType.Name<br>
+                                <strong>Fuel Type:</strong> @car.FuelType.Name<br>
+                                <strong>Transmission Type:</strong> @car.TransmissionType.Name<br>
+                                <strong>Color:</strong> @car.Color<br>
+                                <strong>Mileage:</strong> @car.Mileage km/l<br>
+                                <strong>Seating Capacity:</strong> @car.SeatingCapacity<br>
+                                <strong>Price:</strong> $@car.Price<br>
+                                <strong>Condition:</strong>@(car.ConditionType != null ? car.ConditionType.Name : "N/A")
+                            </p>
+
+                            <p class="card-text">
+                                <strong>Features:</strong>
+                                <ul class="list-unstyled">
+                                    @if (car.BlindspotMonitor)
+                                    {
+                                        <li><i class="fa fa-check"></i> Blind spot Monitor</li>
+                                    }
+                                    @if (car.Adaptivecruisecontrol)
+                                    {
+                                        <li><i class="fa fa-check"></i> Adaptive cruise control</li>
+                                    }
+                                    @if (car.BackupCamera)
+                                    {
+                                        <li><i class="fa fa-check"></i> Backup Camera</li>
+                                    }
+                                    @if (car.ForwardCollisionwarning)
+                                    {
+                                        <li><i class="fa fa-check"></i> Forward Collision warning</li>
+                                    }
+                                    @if (car.Heatedseats)
+                                    {
+                                        <li><i class="fa fa-check"></i> Heated seats</li>
+                                    }
+                                    @if (car.Hillassist)
+                                    {
+                                        <li><i class="fa fa-check"></i> Hill assist</li>
+                                    }
+                                    @if (car.Sunroof)
+                                    {
+                                        <li><i class="fa fa-check"></i> Sun roof</li>
+                                    }
+                                    @if (car.AutoPark)
+                                    {
+                                        <li><i class="fa fa-check"></i> Auto Park</li>
+                                    }
+                                    @if (car.Automaticemergencybraking)
+                                    {
+                                        <li><i class="fa fa-check"></i> Automatic emergency braking</li>
+                                    }
+                                    @if (car.EvasiveSteering)
+                                    {
+                                        <li><i class="fa fa-check"></i> Evasive Steering</li>
+                                    }
+                                    @if (car.Leatherseats)
+                                    {
+                                        <li><i class="fa fa-check"></i> Leather seats</li>
+                                    }
+                                    @if (car.Remotestart)
+                                    {
+                                        <li><i class="fa fa-check"></i> Remote start</li>
+                                    }
+                                    @if (car.USBoutlets)
+                                    {
+                                        <li><i class="fa fa-check"></i> USB outlets</li>
+                                    }
+                                    @if (car.Drivercommunicationassistance)
+                                    {
+                                        <li><i class="fa fa-check"></i> Driver communication assistance</li>
+                                    }
+                                    @if (car.AirConditioning)
+                                    {
+                                        <li><i class="fa fa-check"></i> Air Conditioning</li>
+                                    }
+                                    @if (car.Battery)
+                                    {
+                                        <li><i class="fa fa-check"></i> Battery</li>
+                                    }
+                                    @if (car.Bluetooth)
+                                    {
+                                        <li><i class="fa fa-check"></i> Bluetooth</li>
+                                    }
+                                    
+                                </ul>
+                            </p>
+
+                            <div class="d-flex icons">
+                                <a asp-action="DeleteCar" asp-route-id="@car.Id" class="btn btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
